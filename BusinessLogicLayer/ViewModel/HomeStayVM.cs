@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.ResponseModel
+namespace BusinessLogicLayer.ViewModel
 {
-    public class BookingResponse
+    public class HomeStayVM
     {
+      
+      
+        public string Name { get; set; }
     }
 }

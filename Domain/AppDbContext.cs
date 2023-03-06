@@ -18,21 +18,14 @@ namespace Domain
 
 
         public DbSet<User> Users { get; set; }
+        public DbSet<HomeStay> HomeStays { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingDetail> BookingDetails { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure StudentId as FK for StudentAddress
-           /* modelBuilder.Entity<BookingDetail>()
-                .HasOne(s => s.Booking)
-                .WithOne(a => a.BookingDetail)
-                .HasForeignKey<BookingDetail>(a => a.Id)
-                .OnDelete(DeleteBehavior.Cascade);*/
-
           
-
         }
 
     }

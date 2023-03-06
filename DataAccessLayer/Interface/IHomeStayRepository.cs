@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Interface
 {
-    public interface IUserRepository:IGenericRepository<User>
+    public interface IHomeStayRepository : IGenericRepository<HomeStay>
     {
-        public User getUserByName (string name);
+
     }
 }

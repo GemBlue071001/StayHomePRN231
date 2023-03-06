@@ -30,6 +30,8 @@ namespace BusinessLogicLayer.Service
             {
                 Id = Guid.NewGuid(),
                 Status = bookingVM.Status,
+                HomeStayId = bookingVM.HomeStayId,
+                UserId = bookingVM.UserId,
             };
 
             _bookingRepository.Insert(_booking);
@@ -55,15 +57,12 @@ namespace BusinessLogicLayer.Service
         public BookingVM GetBooking(Guid bookingId)
         {
             var _booking = _bookingRepository.GetBookingById(bookingId);
+            Console.WriteLine(_booking.HomeStay.Name);
             var _bookingVM = _mapper.Map<BookingVM>(_booking);
             return _bookingVM;
 
 
-            /*return new BookingVM()
-            {
-                Status= _booking.Status,
-                Total= _booking.BookingDetail.Total
-            };*/
+           
         }
 
 

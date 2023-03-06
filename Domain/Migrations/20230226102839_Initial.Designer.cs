@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230212140557_oneAndOneRelationshipBookingDbset1")]
-    partial class oneAndOneRelationshipBookingDbset1
+    [Migration("20230226102839_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,10 +30,20 @@ namespace Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("HomeStayId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("HomeStayId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -41,28 +51,55 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Model.BookingDetail", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("Total")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookingId")
+                        .IsUnique();
+
                     b.ToTable("BookingDetails");
+                });
+
+            modelBuilder.Entity("Domain.Model.HomeStay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomeStays");
                 });
 
             modelBuilder.Entity("Domain.Model.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -85,11 +122,30 @@ namespace Domain.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Model.Booking", b =>
+                {
+                    b.HasOne("Domain.Model.HomeStay", "HomeStay")
+                        .WithMany("Bookings")
+                        .HasForeignKey("HomeStayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HomeStay");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Model.BookingDetail", b =>
                 {
                     b.HasOne("Domain.Model.Booking", "Booking")
                         .WithOne("BookingDetail")
-                        .HasForeignKey("Domain.Model.BookingDetail", "Id")
+                        .HasForeignKey("Domain.Model.BookingDetail", "BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -100,6 +156,16 @@ namespace Domain.Migrations
                 {
                     b.Navigation("BookingDetail")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Model.HomeStay", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("Domain.Model.User", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

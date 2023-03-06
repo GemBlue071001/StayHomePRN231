@@ -19,8 +19,17 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingDetailRepository, BookingDetailRepository>();
+builder.Services.AddScoped<IHomeStayRepository, HomeStayRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<HomeStayService>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+/*builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => { policy.AllowAnyMethod().AllowAnyHeader().AllowAnyMethod(); });
+});*/
 
 var app = builder.Build();
 
@@ -30,8 +39,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(p => p
+  .AllowAnyHeader()
+  .AllowAnyMethod()
+  .AllowAnyOrigin()
+);
 app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
 

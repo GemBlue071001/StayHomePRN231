@@ -14,6 +14,13 @@ namespace DataAccessLayer.Repository
         public UserRepository(AppDbContext context) : base(context)
         {
 
+
+
+        }
+
+        public User getUserByName(string name)
+        {
+           return Context.Users.Where(user=> user.Name == name).FirstOrDefault();
         }
     }
 }

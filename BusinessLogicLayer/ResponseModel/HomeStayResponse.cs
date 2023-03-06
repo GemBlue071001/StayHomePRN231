@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.ResponseModel
 {
-    public class BookingResponse
+    public class HomeStayResponse
     {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

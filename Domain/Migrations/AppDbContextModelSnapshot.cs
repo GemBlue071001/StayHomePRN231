@@ -28,13 +28,27 @@ namespace Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("HomeStayId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HomeStayId");
 
                     b.HasIndex("UserId");
 
@@ -61,13 +75,26 @@ namespace Domain.Migrations
                     b.ToTable("BookingDetails");
                 });
 
+            modelBuilder.Entity("Domain.Model.HomeStay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomeStays");
+                });
+
             modelBuilder.Entity("Domain.Model.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -101,9 +128,21 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Model.Booking", b =>
                 {
-                    b.HasOne("Domain.Model.User", null)
+                    b.HasOne("Domain.Model.HomeStay", "HomeStay")
                         .WithMany("Bookings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("HomeStayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HomeStay");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Model.BookingDetail", b =>
@@ -121,6 +160,11 @@ namespace Domain.Migrations
                 {
                     b.Navigation("BookingDetail")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Model.HomeStay", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("Domain.Model.User", b =>

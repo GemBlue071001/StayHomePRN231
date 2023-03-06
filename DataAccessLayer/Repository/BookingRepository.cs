@@ -20,7 +20,7 @@ namespace DataAccessLayer.Repository
         public Booking GetBookingById (Guid bookingId)
         {
             var _booking = Context.Bookings.Where(b=> b.Id ==bookingId )//LINQ
-                .Include(b=>b.BookingDetail).FirstOrDefault();
+                .Include(b=>b.BookingDetail).Include(b=>b.HomeStay).Include(b => b.User).FirstOrDefault();
             return _booking;
         }
     }

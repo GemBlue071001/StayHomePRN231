@@ -13,6 +13,8 @@ namespace Domain.Model
         public Guid Id { get; set; }
         public double Total { get; set; }
 
+        
+
 
        
         // Navigation property
