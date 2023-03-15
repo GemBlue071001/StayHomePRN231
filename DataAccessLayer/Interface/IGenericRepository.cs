@@ -14,5 +14,6 @@ namespace DataAccessLayer.Interface
         public void Update(T obj);
         public void Delete(object id);
         public void Save();
+
     }
 }

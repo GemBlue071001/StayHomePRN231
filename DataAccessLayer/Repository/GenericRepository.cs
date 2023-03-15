@@ -19,7 +19,7 @@ namespace DataAccessLayer.Repository
             table = Context.Set<T>();
         }
 
-        public List<T> GetAll()
+        public virtual List<T> GetAll()
         {
             return table.ToList();
         }

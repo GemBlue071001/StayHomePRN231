@@ -23,5 +23,12 @@ namespace DataAccessLayer.Repository
                 .Include(b=>b.BookingDetail).Include(b=>b.HomeStay).Include(b => b.User).FirstOrDefault();
             return _booking;
         }
+
+        public override List<Booking> GetAll()
+        {
+            var list = Context.Bookings.Include(b => b.HomeStay).Include(b => b.User).Include(b => b.BookingDetail).ToList();
+            return list;
+        }
+
     }
 }

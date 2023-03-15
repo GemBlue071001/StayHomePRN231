@@ -9,17 +9,19 @@ namespace StayHome.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<Booking, BookingVM>().ForMember
+            CreateMap<Booking, BookingResponse>().ForMember
                 (dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.BookingDetail.Total));
 
 
             CreateMap<HomeStay, HomeStayResponse>();
-            CreateMap<UserVM, User>();
+            CreateMap<User, UserResponse>();
 
-            CreateMap<Booking, BookingVM>()
+            CreateMap<Booking, BookingResponse>()
                 .ForMember(dest => dest.HomeStay, opt => opt.MapFrom(src => new HomeStayResponse() { Id = src.HomeStay.Id, Name = src.HomeStay.Name }))
-                .ForMember(dest => dest.UserVM, opt => opt.MapFrom(src => new UserVM() { FullName = src.User.FullName, Name = src.User.Name }));
+                .ForMember(dest => dest.UserVM, opt => opt.MapFrom(src => new UserResponse() { FullName = src.User.FullName, Name = src.User.Name }))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.BookingDetail.Total)); 
         }
     }
 }
